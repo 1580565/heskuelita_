@@ -2,10 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="US-ASCII">
-    <title>Login Page</title>
+    <title>Title</title>
 </head>
+
 <body>
-ERROR
+error
 </body>
+
 </html>

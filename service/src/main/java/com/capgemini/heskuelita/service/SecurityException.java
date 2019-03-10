@@ -1,9 +1,6 @@
-
 package com.capgemini.heskuelita.service;
 
-
 public class SecurityException extends Exception {
-
 
     public SecurityException() {
     }
