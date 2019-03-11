@@ -13,7 +13,7 @@ public class SecurityServiceImpl implements ISecurityService {
     }
 
     @Override
-    public void login (User user) throws SecurityException {
+    public void login (User user) throws SecurityException { //si este metodo devuelve un User el mail ya no va a sar nulo. tambien hay que cambiar el metodo de la interfaz
 
         try {
             user = this.userDao.login (user.getUserName(), user.getPassword());
