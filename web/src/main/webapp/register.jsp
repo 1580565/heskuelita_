@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <!-- Required meta tags-->
@@ -33,7 +33,13 @@
             <div class="card card-4">
                 <div class="card-body">
                     <h2 class="title">Registrese aqui</h2>
-                    <form method="POST">
+                    <form action="Registry" method="post">
+
+                        <div class="input-group">
+                                      <label class="label">usuario</label>
+                                      <input class="input--style-4" type="text" name="us">
+                                </div>
+
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
@@ -63,11 +69,11 @@
                                     <label class="label">Genero</label>
                                     <div class="p-t-10">
                                         <label class="radio-container m-r-45">Masculino
-                                            <input type="radio" checked="checked" name="gender">
+                                            <input type="radio" checked="checked" name="gender" value="masculino">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="radio-container">Femenino
-                                            <input type="radio" name="gender">
+                                            <input type="radio" name="gender" value = "femenino">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -84,7 +90,7 @@
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">Contraseña</label>
-                                    <input class="input--style-4" type="password" name="contrasenia">
+                                    <input class="input--style-4" type="password" name="password">
                                 </div>
                             </div>
                         </div>
@@ -105,7 +111,7 @@
                             <label class="label">Documento</label>
                             <div class="rs-select2 js-select-simple select--no-search">
 
-                                    <input class="input--style-4" type="text" name="documento">
+                                    <input class="input--style-4" type="text" name="document">
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
@@ -115,7 +121,7 @@
                         </div>
                         <br>
                         <div>
-                            <a href="index.jsp">Si ya esta registrado presione aqui</a>
+                            <a href="sesion.html">Si ya esta registrado presione aqui</a>
                         </div>
                     </form>
                 </div>

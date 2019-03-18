@@ -5,7 +5,7 @@ import com.capgemini.heskuelita.data.entity.UserAnnotation;
 import com.capgemini.heskuelita.data.impl.UserDaoHibernet;
 import com.capgemini.heskuelita.data.util.HibernateUtil;
 import com.capgemini.heskuelita.service.IUserSecurityService;
-import com.capgemini.heskuelita.service.impl.UserUserSecurityServiceImpl;
+import com.capgemini.heskuelita.service.impl.UserSecurityServiceImpl;
 import org.hibernate.SessionFactory;
 
 import javax.servlet.ServletConfig;
@@ -17,12 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/NewUser")
-public class NewUserServlet extends HttpServlet {
+@WebServlet("/Registry")
+public class RegistryServlet extends HttpServlet {
 
     private IUserSecurityService securityService;
 
-    public NewUserServlet(){
+    public RegistryServlet(){
         super();
     }
 
@@ -34,7 +34,7 @@ public class NewUserServlet extends HttpServlet {
 
         try {
 
-            this.securityService = new UserUserSecurityServiceImpl(new UserDaoHibernet(manager));
+            this.securityService = new UserSecurityServiceImpl(new UserDaoHibernet(manager));
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
@@ -45,14 +45,14 @@ public class NewUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         UserAnnotation user = new UserAnnotation();
-        user.setName (req.getParameter("first_name"));
-        user.setPassword (req.getParameter ("password"));
+        user.setUs(req.getParameter("us"));
+        user.setPw(req.getParameter ("password"));
         user.setEmail(req.getParameter("email"));
-        user.setUs_apellido("hola");
-        user.setUs_nombre("hola");
-        user.setUs_doc("123");
-        user.setUs_fnac("asd");
-        user.setUs_gen("33");
+        user.setApellido(req.getParameter("last_name"));
+        user.setNombre(req.getParameter("first_name"));
+        user.setDoc(req.getParameter("document"));
+        user.setFnac(req.getParameter("birthday"));
+        user.setGen(req.getParameter("gender"));
 
 
         try {
@@ -62,7 +62,7 @@ public class NewUserServlet extends HttpServlet {
             HttpSession session = req.getSession ();
             session.setAttribute ("user", user);
 
-            resp.sendRedirect ("home.jsp");
+            resp.sendRedirect ("index.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();

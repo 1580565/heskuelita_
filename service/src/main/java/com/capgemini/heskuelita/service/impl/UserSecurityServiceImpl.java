@@ -8,12 +8,12 @@ import com.capgemini.heskuelita.service.IUserSecurityService;
 import com.capgemini.heskuelita.service.SecurityException;
 
 
-public class UserUserSecurityServiceImpl implements IUserSecurityService {
+public class UserSecurityServiceImpl implements IUserSecurityService {
 
 
     private IUserDao userDao;
 
-    public UserUserSecurityServiceImpl(IUserDao userDao) {
+    public UserSecurityServiceImpl(IUserDao userDao) {
 
         super ();
 
@@ -25,7 +25,7 @@ public class UserUserSecurityServiceImpl implements IUserSecurityService {
     public void login (UserAnnotation user) throws SecurityException {
 
         try {
-            this.userDao.login (user.getName(), user.getPassword());
+            this.userDao.login (user.getUs(), user.getPw());
         } catch (Exception e) {
 
             throw new SecurityException(e);
@@ -36,7 +36,7 @@ public class UserUserSecurityServiceImpl implements IUserSecurityService {
     public void NewUser(UserAnnotation user) throws SecurityException {
 
         try {
-            this.userDao.NewUser(user.getName(),user.getPassword(),user.getEmail(), user.getUs_nombre(),user.getUs_apellido(),user.getUs_fnac(),user.getUs_gen(),user.getUs_doc());
+            this.userDao.NewUser(user.getUs(),user.getPw(),user.getEmail(), user.getNombre(),user.getApellido(),user.getFnac(),user.getGen(),user.getDoc());
         }catch (Exception e){
             throw new SecurityException(e);
         }

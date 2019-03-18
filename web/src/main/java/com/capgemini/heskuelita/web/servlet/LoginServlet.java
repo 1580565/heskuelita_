@@ -1,38 +1,41 @@
-package com.capgemini.heskuelita.web.Servlet;
 
-import com.capgemini.heskuelita.core.beans.User;
-import com.capgemini.heskuelita.data.db.DBConnectionManager;
-import com.capgemini.heskuelita.data.impl.UserDaoJDBC;
-import com.capgemini.heskuelita.service.ISecurityService;
-import com.capgemini.heskuelita.service.impl.SecurityServiceImpl;
+package com.capgemini.heskuelita.web.servlet;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.annotation.WebServlet;
+import com.capgemini.heskuelita.data.entity.UserAnnotation;
+import com.capgemini.heskuelita.data.impl.UserDaoHibernet;
+import com.capgemini.heskuelita.data.util.HibernateUtil;
+import com.capgemini.heskuelita.service.IUserSecurityService;
+import com.capgemini.heskuelita.service.impl.UserSecurityServiceImpl;
+import org.hibernate.SessionFactory;
 import java.io.*;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+
 
 @WebServlet ("/login")
 public class LoginServlet extends HttpServlet {
 
-    private ISecurityService securityService;
+
+    private IUserSecurityService securityService;
+
 
     public LoginServlet () {
+
         super ();
     }
 
-    @Override
+   @Override
     public void init (ServletConfig config) throws ServletException {
 
-        ServletContext context = config.getServletContext();
-
-        DBConnectionManager manager = (DBConnectionManager) context.getAttribute("db");
+       SessionFactory manager = HibernateUtil.getSessionFactory();
 
         try {
-            this.securityService = new SecurityServiceImpl (new UserDaoJDBC(manager.getConnection()));
 
+            this.securityService = new UserSecurityServiceImpl(new UserDaoHibernet(manager));
         } catch (Exception e) {
+
             throw new ServletException(e);
         }
     }
@@ -40,19 +43,25 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = new User ();
-        user.setUserName (req.getParameter("user"));
-        user.setPassword (req.getParameter("pwd"));
-
+        UserAnnotation user = new UserAnnotation();
+        user.setUs(req.getParameter ("user"));
+        user.setPw(req.getParameter ("password"));
         try {
+
             this.securityService.login (user);
-            HttpSession session = req.getSession();
-            session.setAttribute("user", user);
-            resp.sendRedirect("pagina.html");
+
+            HttpSession session = req.getSession ();
+            session.setAttribute ("user", user);
+
+            resp.sendRedirect ("pagina.html");
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect("err.jsp");
+            resp.sendRedirect ("err.jsp");
         }
+        finally {
+
+        }
+
     }
 }

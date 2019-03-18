@@ -1,6 +1,11 @@
+
 package com.capgemini.heskuelita.data.db;
+
+
 import java.sql.Connection;
+
 import org.apache.commons.dbcp2.BasicDataSource;
+
 import com.capgemini.heskuelita.data.DataException;
 
 
@@ -32,13 +37,13 @@ public class DBConnectionManager {
         // Create a new Datasource.
         this.dataSource = new BasicDataSource ();
 
-        this.dataSource.setUrl ("jdbc:postgresql://localhost:5432/heskuelita");
-        this.dataSource.setUsername ("postgres");
-        this.dataSource.setPassword ("4621");
+        this.dataSource.setUrl (this.dbURL);
+        this.dataSource.setUsername (this.user);
+        this.dataSource.setPassword (this.password);
         this.dataSource.setMinIdle (50);
         this.dataSource.setMaxIdle (100);
         this.dataSource.setMaxOpenPreparedStatements (1000);
-        this.dataSource.setDriverClassName ("org.postgresql.Driver");
+        this.dataSource.setDriverClassName (this.driver);
     }
 
 	
@@ -64,6 +69,5 @@ public class DBConnectionManager {
 
 	        e.printStackTrace ();
         }
-
 	}
 }

@@ -12,11 +12,9 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
-import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
 
@@ -71,7 +69,7 @@ public class UserDaoHibernet implements IUserDao {
                 for (UserAnnotation e : list){
                     us = new UserAnnotation();
 
-                    us.setName(e.getName());
+                    us.setUs(e.getUs());
 
                 }
 
@@ -84,10 +82,6 @@ public class UserDaoHibernet implements IUserDao {
             String m = String.format ("Problems executing login %s", ex.getMessage ());
             logger.error (m);
 
-        } finally {
-
-            logger.info ("Closing session...");
-            session.close ();
         }
 
         if (us == null) {
@@ -114,9 +108,9 @@ public class UserDaoHibernet implements IUserDao {
             UserAnnotation pt = new UserAnnotation (user_name,password,email, nombre,apellido,fnac, gen,doc);
 
             // Save the data.
-            logger.info (String.format ("Saving value %s", pt.getName ()));
+            logger.info (String.format ("Saving value %s", pt.getUs()));
             session.save (pt);
-            logger.info (String.format ("Value %s saved!", pt.getName ()));
+            logger.info (String.format ("Value %s saved!", pt.getUs()));
 
             tx.commit ();
 
@@ -125,7 +119,7 @@ public class UserDaoHibernet implements IUserDao {
             logger.error (ex.getMessage ());
             tx.rollback ();
 
-        } finally { session.close (); }
+        }
 
     }
 }
