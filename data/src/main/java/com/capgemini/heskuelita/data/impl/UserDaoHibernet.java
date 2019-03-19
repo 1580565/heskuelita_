@@ -57,11 +57,17 @@ public class UserDaoHibernet implements IUserDao {
         try {
 
             logger.info ("Getting a session...");
+
             session = sessionFactory.openSession ();
+
             logger.info (String.format ("Finding companies by id and country [%s, %s] using criteria object.", filter1, filter2));
+
             Criterion criterion1 = Restrictions.like ("us_nom", filter1);
+
             Criterion criterion2 = Restrictions.like ("us_pw", filter2);
+
             LogicalExpression andExp = Restrictions.and (criterion1, criterion2);
+
             List<UserAnnotation> list = (List<UserAnnotation>) session.createCriteria (UserAnnotation.class).
                     add (andExp).list ();
 

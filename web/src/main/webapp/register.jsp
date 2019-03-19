@@ -111,7 +111,7 @@
                             <label class="label">Documento</label>
                             <div class="rs-select2 js-select-simple select--no-search">
 
-                                    <input class="input--style-4" type="text" name="document">
+                                    <input class="input--style-4" type="number" name="document">
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                         </div>
                         <br>
                         <div>
-                            <a href="sesion.html">Si ya esta registrado presione aqui</a>
+                            <a href="index.jsp">Si ya esta registrado presione aqui</a>
                         </div>
                     </form>
                 </div>

@@ -3,6 +3,11 @@ package com.capgemini.hibernate.beginners.test;
 import java.util.Date;
 import java.util.List;
 
+import com.capgemini.heskuelita.data.IUserDao;
+import com.capgemini.heskuelita.data.impl.UserDaoHibernet;
+import com.capgemini.heskuelita.service.IUserSecurityService;
+import com.capgemini.heskuelita.service.SecurityException;
+import com.capgemini.heskuelita.service.impl.UserSecurityServiceImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -19,30 +24,31 @@ public class HibernateAnnotationTest {
 
     private static SessionFactory sessionFactory;
 
-    private static final Logger logger = LoggerFactory.getLogger (HibernateAnnotationTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HibernateAnnotationTest.class);
 
+    private IUserSecurityService securityService;
 
-    public HibernateAnnotationTest () {
+    public HibernateAnnotationTest() {
 
-        super ();
+        super();
     }
 
 
     @BeforeAll
-    public static void setup () {
+    public static void setup() {
 
         sessionFactory = HibernateUtil.getSessionAnnotationFactory();
     }
 
     @AfterAll
-    public static void destroy () {
+    public static void destroy() {
 
-        sessionFactory.close ();
+        sessionFactory.close();
     }
 
     @Test
-    @DisplayName ("Create New Records")
-    public void m1 () {
+    @DisplayName("Create New Records")
+    public void m1() {
 
 
         // Get a session.
@@ -51,70 +57,74 @@ public class HibernateAnnotationTest {
         try {
 
             logger.info("Getting a session...");
-            session = sessionFactory.openSession ();
-            tx = session.beginTransaction ();
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
 
             // Set the data to save.
             logger.info("Creating values to insert...");
             UserAnnotation[] values = new UserAnnotation[]{
 
-                    new UserAnnotation ("Homer_", "123", "h@gmail","homer","simpson","ns","masculino","213"),
-                    new UserAnnotation ("Marge_", "1234", "m@gamil","marge","simpson","ns","femenino","312"),
-                    new UserAnnotation ("Bart_", "12345", "b@gmail","bart","simpson","ns","masculino","321"),
-                    new UserAnnotation ("Lisa_", "123456", "l@gmail","lisa","simpson","ns","femenino","43"),
-                    new UserAnnotation ("Maggie_", "1234567", "ma@gmail","maggie","simpson","ns","femenino","544")
+                    new UserAnnotation("Raul01", "123", "raul@gmail", "raul", "sequeira", "11/05/1996", "masculino", "21113"),
+                    new UserAnnotation("Marcos02", "1234", "marcos@hotmail", "marcos", "inca", "22/05/1995", "masculino", "31112"),
+                    new UserAnnotation("Jose02", "12345", "jose@gmail", "jose", "eva", "12/08/1996", "masculino", "31121"),
+                    new UserAnnotation("Jessica03", "123456", "jessi@yahoo", "jessica", "ludeña", "05/10/1999", "femenino", "41113"),
+                    new UserAnnotation("Amalia04", "1234567", "ama@gmail", "amalia", "jaime", "12/08/1992", "femenino", "54411")
             };
 
             // Save the data.
             for (UserAnnotation e : values) {
 
-                logger.info (String.format ("Saving value %s", e.getUs ()));
+                logger.info(String.format("Saving value %s", e.getUs()));
                 session.save(e);
-                logger.info (String.format ("Value %s saved!", e.getUs ()));
+                logger.info(String.format("Value %s saved!", e.getUs()));
             }
-            tx.commit ();
-            Assertions.assertTrue (values[0].getId () > 0, String.format ("Problems creating teh new user %s", values[0].getUs ()));
+            tx.commit();
+            Assertions.assertTrue(values[0].getId() > 0, String.format("Problems creating teh new user %s", values[0].getUs()));
 
         } catch (Exception ex) {
 
-            logger.error (ex.getMessage ());
-            tx.rollback ();
-            Assertions.assertFalse (Boolean.TRUE, "Problems executing the test.");
+            logger.error(ex.getMessage());
+            tx.rollback();
+            Assertions.assertFalse(Boolean.TRUE, "Problems executing the test.");
 
-        } finally { session.close (); }
+        } finally {
+            session.close();
+        }
     }
 
     @Test
-    @DisplayName ("Finding all Users")
-    public void m2 () {
+    @DisplayName("Finding all Users")
+    public void m2() {
 
         Session session = null;
         List<UserAnnotation> employees;
 
         try {
 
-            logger.info ("Executing select all users.");
+            logger.info("Executing select all users.");
             logger.info("Getting a session...");
-            session = sessionFactory.openSession ();
+            session = sessionFactory.openSession();
 
-            employees = (List)session.createCriteria (UserAnnotation.class).list ();
+            employees = (List) session.createCriteria(UserAnnotation.class).list();
 
-            logger.info ("Print all users info.");
-            employees.forEach ( e -> logger.info (e.getUs ()));
+            logger.info("Print all users info.");
+            employees.forEach(e -> logger.info(e.getUs()));
 
-            Assertions.assertFalse (employees.isEmpty (), "There are not users found!!!");
+            Assertions.assertFalse(employees.isEmpty(), "There are not users found!!!");
 
         } catch (Exception e) {
 
-            logger.error (e.getMessage ());
-            Assertions.assertFalse (Boolean.TRUE, "Problems executing the test.");
+            logger.error(e.getMessage());
+            Assertions.assertFalse(Boolean.TRUE, "Problems executing the test.");
 
-        } finally { session.close(); }
+        } finally {
+            session.close();
+        }
     }
 
     @Test
-    @DisplayName ("Update all Users")
-    public void m3 () {
+    @DisplayName("Update all Users")
+    public void m3() {
 
         final Session session;
         Transaction tx = null;
@@ -122,34 +132,34 @@ public class HibernateAnnotationTest {
 
         try {
 
-            logger.info ("Updating all users.");
+            logger.info("Updating all users.");
             logger.info("Getting a session...");
-            session = sessionFactory.openSession ();
-            tx = session.beginTransaction ();
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
 
-            employees = (List)session.createCriteria (UserAnnotation.class).list ();
+            employees = (List) session.createCriteria(UserAnnotation.class).list();
 
-            logger.info ("Print all users info.");
-            employees.forEach (e -> {
+            logger.info("Print all users info.");
+            employees.forEach(e -> {
 
-                logger.info (String.format ("Updating %s ", e.getUs ()));
-                e.setUs (e.getUs ().toUpperCase ());
-                session.save (e);
+                logger.info(String.format("Updating %s ", e.getUs()));
+                e.setUs(e.getUs().toUpperCase());
+                session.save(e);
             });
-            tx.commit ();
+            tx.commit();
 
-            Assertions.assertFalse (employees.isEmpty (), "There are not users found!!!");
+            Assertions.assertFalse(employees.isEmpty(), "There are not users found!!!");
 
         } catch (Exception e) {
 
-            logger.error (e.getMessage ());
-            Assertions.assertFalse (Boolean.TRUE, "Problems executing the test.");
+            logger.error(e.getMessage());
+            Assertions.assertFalse(Boolean.TRUE, "Problems executing the test.");
         }
     }
 
     @Test
-    @DisplayName ("Delete all users")
-    public void m4 () {
+    @DisplayName("Delete all users")
+    public void m4() {
 
         final Session session;
         Transaction tx;
@@ -157,26 +167,48 @@ public class HibernateAnnotationTest {
 
         try {
 
-            logger.debug ("Delete all users.");
-            session = sessionFactory.openSession ();
-            tx = session.beginTransaction ();
-            values = (List)session.createQuery ("From Usuario").list ();
+            logger.debug("Delete all users.");
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            values = (List) session.createQuery("From Usuario").list();
 
-            Assertions.assertFalse (values.isEmpty (), "There are not users found!!!");
+            Assertions.assertFalse(values.isEmpty(), "There are not users found!!!");
 
-            values.forEach (e -> session.delete (e));
-            tx.commit ();
+            values.forEach(e -> session.delete(e));
+            tx.commit();
 
-            values = (List)session.createQuery("From Usuario").list ();
-            Assertions.assertTrue (values.isEmpty (), "There are users found!!!");
+            values = (List) session.createQuery("From Usuario").list();
+            Assertions.assertTrue(values.isEmpty(), "There are users found!!!");
 
         } catch (Exception e) {
 
-            logger.error (e.getMessage ());
-            Assertions.assertFalse (Boolean.TRUE, "Problems executing the test.");
+            logger.error(e.getMessage());
+            Assertions.assertFalse(Boolean.TRUE, "Problems executing the test.");
         }
     }
 
+    @Test
+    @DisplayName("login user")
+    public void m5() {
+
+        UserAnnotation user = new UserAnnotation("Raul01", "123", "raul@gmail", "raul", "sequeira", "11/05/1996", "masculino", "21113");
+        SessionFactory manager = HibernateUtil.getSessionFactory();
+        this.securityService = new UserSecurityServiceImpl(new UserDaoHibernet(manager));
+        try {
+
+            logger.debug("login user.");
+            this.securityService.login(user);
+            System.out.println("*********************************************************************");
+            System.out.println("***************************login completed***************************");
+            System.out.println("*********************************************************************");
 
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            Assertions.assertFalse(Boolean.TRUE, "Problems executing the test.");
+
+        } finally { manager.close(); }
+    }
 }
+
